@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.validation.constraints.Digits;
 
-import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -33,5 +32,4 @@ public class Book {
 	BigDecimal price;
 	int quantity;
 	String imageName;
-	Binary image;
 }

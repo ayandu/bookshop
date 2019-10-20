@@ -4,7 +4,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -40,7 +39,7 @@ public class BookService {
   public Mono<Book> create(Book book) {
 	try {
 		//this.template.store(new FileInputStream(ROOT_DIR + book.getImageName()), book.getImageName());
-		this.template.store(resourceLoader.getResource("classpath:android.png").getInputStream(), book.getImageName());
+		this.template.store(resourceLoader.getResource("classpath:"+book.getImageName()).getInputStream(), book.getImageName());
 	} catch ( IOException  e) {
 		 e.printStackTrace();
 	}
