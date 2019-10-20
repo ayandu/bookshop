@@ -1,7 +1,7 @@
-com/bookshop/book/HedgeExchangeFilterFunction.class
-com/bookshop/book/BookApplication.class
-com/bookshop/book/model/Book.class
 com/bookshop/book/repository/BookRepository.class
 com/bookshop/book/model/Book$BookBuilder.class
 com/bookshop/book/service/BookService.class
 com/bookshop/book/controller/BookController.class
+com/bookshop/book/HedgeExchangeFilterFunction.class
+com/bookshop/book/BookApplication.class
+com/bookshop/book/model/Book.class
