@@ -39,13 +39,13 @@ public class CartService {
 	    return cartRepository.findById(id)
 	        .flatMap(cart -> cartRepository.delete(cart).then(Mono.just(cart)));
 	}
-	
+			
 	public Mono<BigDecimal> getPrice(String id){
 		return this.cartRepository.findById(id)
 			.map( cart -> cart.getPrice());	
 	}
 
-	public Mono<Cart> removeBookFromCart(String id, String bookId) {
+	public Mono<Cart> removeBookFromCart(String id, String bookId) {																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																				
 		return this.cartRepository.findById(id)
 				.map(cart -> 
 					this.bookResource.getBookById(bookId).map( book -> cart.removeBook(book)))

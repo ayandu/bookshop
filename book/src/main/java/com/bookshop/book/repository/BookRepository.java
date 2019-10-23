@@ -12,5 +12,7 @@ public interface BookRepository  extends ReactiveMongoRepository<Book, String>{
 	Mono<Book> findFirstByImageNameIgnoreCase(String filename);
 
 	Flux<Book> findByTitleContainingIgnoreCase(String title);
+	
+	Mono<Book> findByTitleIgnoreCase(String title);
 
 }

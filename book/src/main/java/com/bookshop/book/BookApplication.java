@@ -14,9 +14,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.Assert;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ClientResponse;
@@ -31,11 +33,16 @@ import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableTransactionManagement
 public class BookApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookApplication.class, args);
 	}
+	@Bean
+    MongoTransactionManager transactionManager(MongoDbFactory dbFactory) {
+        return new MongoTransactionManager(dbFactory);
+    }
 	
 	@Bean
 	WebClient client(HedgeExchangeFilterFunction eff) {

@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bookshop.book.model.Book;
 import com.bookshop.book.repository.BookRepository;
 
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BookService {
 
  // private final String ROOT_DIR = "//home//nducele//Downloads";
@@ -37,16 +40,24 @@ public class BookService {
   }
   
   public Mono<Book> create(Book book) {
-	try {
-		//this.template.store(new FileInputStream(ROOT_DIR + book.getImageName()), book.getImageName());
-		this.template.store(resourceLoader.getResource("classpath:"+book.getImageName()).getInputStream(), book.getImageName());
-	} catch ( IOException  e) {
-		 e.printStackTrace();
-	}
-    return bookRepository.save(book);
+	
+	return this.bookRepository.findByTitleIgnoreCase(book.getTitle())
+							.flatMap( b ->  /*{b.setQuantity( b.getQuantity() + book.getQuantity()); return b;}*/
+							 this.bookRepository.save(b.toBuilder().quantity(b.getQuantity() + book.getQuantity()).build()))
+							.switchIfEmpty( this.save(book));
   }
 
-  public Mono<Book> update(String id, Book updatedBook) {
+  private Mono<Book> save(Book book) {
+	  try {
+			//this.template.store(new FileInputStream(ROOT_DIR + book.getImageName()), book.getImageName());
+			this.template.store(resourceLoader.getResource("classpath:"+book.getImageName()).getInputStream(), book.getImageName());
+		} catch ( IOException  e) {
+			 e.printStackTrace();
+		}
+	  return this.bookRepository.save(book);
+}
+
+public Mono<Book> update(String id, Book updatedBook) {
 	return bookRepository.findById(id)
         .map(existingBook -> existingBook.toBuilder()
               .title(updatedBook.getTitle())
