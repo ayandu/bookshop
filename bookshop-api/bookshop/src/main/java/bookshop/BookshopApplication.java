@@ -22,6 +22,7 @@ public class BookshopApplication {
 	public MongoTransactionManager transactionManager(MongoDbFactory dbFactory) {
 		return new MongoTransactionManager(dbFactory);
 	}
+
 	@Bean
 	public WebClient client() {
 		return WebClient.builder()

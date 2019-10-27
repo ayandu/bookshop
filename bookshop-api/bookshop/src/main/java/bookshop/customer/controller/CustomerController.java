@@ -4,17 +4,11 @@ import java.net.URI;
 
 import javax.validation.Valid;
 
+import bookshop.customer.model.Address;
 import bookshop.customer.model.Customer;
 import bookshop.customer.service.CustomerService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -46,7 +40,14 @@ public class CustomerController {
 		return this.customerService.create(newCustomer)
 				.map(customer -> ResponseEntity.created(URI.create("/customers/" + customer.getId())).body(customer));
 	}
-	
+
+	@PatchMapping("customer/{id}")
+	public Mono<ResponseEntity<Customer>> updateAddress(@PathVariable String id, @RequestBody @Valid Address address){
+		return this.customerService.updateAddress(id, address)
+				.map(ResponseEntity::ok)
+				.defaultIfEmpty(ResponseEntity.noContent().build());
+	}
+
 	@GetMapping("customer?email={email}")
 	public Flux<Customer> searchByEmail(@PathVariable("email") String email) {
 	    return this.customerService.searchByEmail(email);

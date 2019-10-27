@@ -1,11 +1,14 @@
 package bookshop.customer.service;
 
+import bookshop.customer.model.Address;
 import bookshop.customer.model.Customer;
 import bookshop.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.rmi.MarshalledObject;
 
 @Service
 public class CustomerService {
@@ -34,6 +37,10 @@ public class CustomerService {
 		    		.address(newCustomer.getAddress())
 		    		.phone(newCustomer.getPhone())
 		    		.name(newCustomer.getName()).build());
+	  }
+
+	  public Mono<Customer> updateAddress(String id, Address address){
+	  	return this.customerRepository.findById(id).flatMap( book ->  this.customerRepository.save(book.toBuilder().address(address.getAddress()).build()));
 	  }
 	  
 	  public Mono<Customer> update(String id, Customer updatedCustomer) {

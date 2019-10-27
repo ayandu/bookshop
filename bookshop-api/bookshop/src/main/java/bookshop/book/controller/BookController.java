@@ -6,6 +6,7 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import bookshop.book.model.Book;
+import bookshop.book.model.Price;
 import bookshop.book.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +42,9 @@ public class BookController {
     return this.bookService.searchByTitle(title);
   }
 
-  @PatchMapping("/book")
-  public Mono<ResponseEntity<Book>> createBook(String id, @RequestBody BigDecimal price) {
-      return this.bookService.changePrice(id, price)
+  @PatchMapping("/book/{id}")
+  public Mono<ResponseEntity<Book>> updatePrice(@PathVariable String id, @RequestBody @Valid Price price) {
+      return this.bookService.updatePrice(id, price)
               .map(ResponseEntity::ok)
               .defaultIfEmpty(ResponseEntity.noContent().build());
   }

@@ -1,6 +1,7 @@
 package bookshop.book.service;
 
 import bookshop.book.model.Book;
+import bookshop.book.model.Price;
 import bookshop.book.repository.BookRepository;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
@@ -58,8 +59,9 @@ public class BookService {
 	  return this.bookRepository.save(book);
 }
 
-public Mono<Book> changePrice(String id, @Digits(integer= 1000000000, fraction=2) BigDecimal price){
-      return this.bookRepository.findById(id).map( book -> book.toBuilder().price(price).build());
+public Mono<Book> updatePrice(String id, Price price){
+      return this.bookRepository.findById(id).map( book -> book.toBuilder().price( price.getPrice()).build())
+              .flatMap(book -> this.bookRepository.save(book));
 }
 
 public Mono<Book> update(String id, Book updatedBook) {
