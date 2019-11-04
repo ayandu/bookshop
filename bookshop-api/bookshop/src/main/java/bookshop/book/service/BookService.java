@@ -3,11 +3,14 @@ package bookshop.book.service;
 import bookshop.book.model.Book;
 import bookshop.book.model.Price;
 import bookshop.book.repository.BookRepository;
+import bookshop.cart.model.Cart;
+import bookshop.cart.service.CartService;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,6 +32,7 @@ public class BookService {
   private final ResourceLoader resourceLoader;
   private final GridFsTemplate template;
   private final BookRepository bookRepository;
+  private final CartService cartService;
   private final int ONE = 1;
 
   public Flux<Book> getAll() {
@@ -46,8 +50,12 @@ public class BookService {
   public Mono<Book> create(Book book) {
 	
 	return this.bookRepository.findByTitleIgnoreCase(book.getTitle())
-							.flatMap( b -> this.bookRepository.save(b.toBuilder().quantity(b.getQuantity() + book.getQuantity()).build()))
-							.switchIfEmpty( this.save(book));
+                            .filter( b -> book.getQuantity() < 0 )
+							.flatMap( b -> this.bookRepository.save(b.toBuilder().quantity(b.getQuantity() + book.getQuantity()).build())
+                                    /*{ if( book.getQuantity() > 0) this.bookRepository.save(b.toBuilder().quantity(b.getQuantity() + book.getQuantity()).build());
+							return b; }*/)
+							.switchIfEmpty(this.save(book));
+
   }
 
   private Mono<Book> save(Book book) {
@@ -78,9 +86,19 @@ public Mono<Book> update(String id, Book updatedBook) {
               .build())
         .flatMap(bookRepository::save);
   }
+
+  public Mono<BigDecimal> getTotalPrice(String cartId){
+
+      Mono<Cart> cart = this.cartService.getById(cartId);
+
+      return cart.flatMap( c -> Flux.fromIterable(c.getBookIdBasket())
+              .flatMap( this::getById)
+              .map(Book::getPrice)
+              .reduce( new BigDecimal(0), BigDecimal::add));
+  }
   
   public Mono<Book> deleteById(String id) {
-    return bookRepository.findById(id).flatMap(b ->  b.deleteBook());
+    return bookRepository.findById(id).flatMap(b ->  this.bookRepository.save(b.toBuilder().quantity(b.getQuantity() - 1).build()));
   }
 
     public Mono<Book> deleteById_ADMIN(String id) {

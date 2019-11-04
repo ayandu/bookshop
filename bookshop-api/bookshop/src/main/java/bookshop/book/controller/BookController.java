@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import bookshop.book.model.Book;
 import bookshop.book.model.Price;
 import bookshop.book.service.BookService;
+import bookshop.cart.model.Cart;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@CrossOrigin("*")
 public class BookController {
 
   private final BookService bookService;
@@ -42,6 +43,14 @@ public class BookController {
     return this.bookService.searchByTitle(title);
   }
 
+  @GetMapping("/cart-price/{id}")
+  public Mono<ResponseEntity<BigDecimal>> getTotalPrice(@PathVariable String id) {
+
+    return this.bookService.getTotalPrice(id)
+            .map(ResponseEntity::ok)
+            .defaultIfEmpty(ResponseEntity.noContent().build());
+  }
+
   @PatchMapping("/book/{id}")
   public Mono<ResponseEntity<Book>> updatePrice(@PathVariable String id, @RequestBody @Valid Price price) {
       return this.bookService.updatePrice(id, price)
@@ -61,11 +70,19 @@ public class BookController {
         .defaultIfEmpty(ResponseEntity.noContent().build());
   }
 
-  @DeleteMapping("/book/{id}")
+  @PostMapping("/book/{id}")
   public Mono<ResponseEntity<Void>> deleteBook(@PathVariable String id) {
 	return bookService.deleteById(id)
         .map(r -> ResponseEntity.ok().<Void>build())
         .defaultIfEmpty(ResponseEntity.noContent().build());
+  }
+
+
+  @DeleteMapping("/book/{id}")
+  public Mono<ResponseEntity<Void>> hardDelete(@PathVariable String id) {
+    return bookService.deleteById_ADMIN(id)
+            .map(r -> ResponseEntity.ok().<Void>build())
+            .defaultIfEmpty(ResponseEntity.noContent().build());
   }
 
   @GetMapping("/book/{id}/image")
@@ -84,5 +101,6 @@ public class BookController {
   public Mono<Book> getBook(@PathVariable String filename ){
 	  return this.bookService.byImageName(filename);
   }
-  
+
+
 }

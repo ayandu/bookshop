@@ -55,13 +55,20 @@ public class CartController {
 	        .map(r -> ResponseEntity.ok().<Void>build())
 	        .defaultIfEmpty(ResponseEntity.noContent().build());
 	 }
-	
-	@GetMapping("price/{id}")
+
+	@DeleteMapping("carts/delete")
+	public Mono<ResponseEntity<Void>> deleteCart() {
+		return cartService.deleteAll()
+				.map(ResponseEntity::ok)
+				.defaultIfEmpty(ResponseEntity.noContent().build());
+	}
+
+	/*@GetMapping("price/{id}")
 	public Mono<ResponseEntity<BigDecimal>> getPriceById(@PathVariable("id") String id){
 		return this.cartService.getPrice(id)
 				.map(ResponseEntity::ok)
 		        .defaultIfEmpty(ResponseEntity.noContent().build());
-	}
+	}*/
 	
 	@PostMapping("cart/{id}/remove-book/{bookId}")
 	public Mono<ResponseEntity<Cart>> removeBookFromCart(@PathVariable("id") String id, @PathVariable("bookId") String bookId){

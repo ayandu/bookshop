@@ -44,7 +44,7 @@ public class OrderController {
 				.map(newOrder -> ResponseEntity.created(URI.create("/order/" + newOrder.getId())).body(newOrder));
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/order/{id}")
 	public Mono<ResponseEntity<Order>> deleteById(@PathVariable("id") String id){
 		return this.orderService.deleteById(id)
 		        .map(ResponseEntity::ok)
