@@ -38,10 +38,13 @@ public class BookController {
         .defaultIfEmpty(ResponseEntity.noContent().build());
   }
   
+/*
   @GetMapping("/book?search={title}")
   public Flux<Book> searchByTitle(@PathVariable String title) {
     return this.bookService.searchByTitle(title);
   }
+*/
+
 
   @GetMapping("/cart-price/{id}")
   public Mono<ResponseEntity<BigDecimal>> getTotalPrice(@PathVariable String id) {
@@ -51,12 +54,14 @@ public class BookController {
             .defaultIfEmpty(ResponseEntity.noContent().build());
   }
 
+
   @PatchMapping("/book/{id}")
   public Mono<ResponseEntity<Book>> updatePrice(@PathVariable String id, @RequestBody @Valid Price price) {
       return this.bookService.updatePrice(id, price)
               .map(ResponseEntity::ok)
               .defaultIfEmpty(ResponseEntity.noContent().build());
   }
+
   @PostMapping("/book")
   public Mono<ResponseEntity<Book>> createBook(@RequestBody @Valid Book newBook) {
 	return this.bookService.create(newBook)
@@ -73,17 +78,19 @@ public class BookController {
   @PostMapping("/book/{id}")
   public Mono<ResponseEntity<Void>> deleteBook(@PathVariable String id) {
 	return bookService.deleteById(id)
-        .map(r -> ResponseEntity.ok().<Void>build())
+                                                            .map(r -> ResponseEntity.ok().<Void>build())
         .defaultIfEmpty(ResponseEntity.noContent().build());
   }
 
 
+/*
   @DeleteMapping("/book/{id}")
   public Mono<ResponseEntity<Void>> hardDelete(@PathVariable String id) {
     return bookService.deleteById_ADMIN(id)
             .map(r -> ResponseEntity.ok().<Void>build())
             .defaultIfEmpty(ResponseEntity.noContent().build());
   }
+*/
 
   @GetMapping("/book/{id}/image")
   public Mono<ResponseEntity<GridFsResource>> getImage(@PathVariable String id){
@@ -92,6 +99,7 @@ public class BookController {
 		        .defaultIfEmpty(ResponseEntity.noContent().build());
   }
   
+/*
   @GetMapping("/images")
   public Flux<GridFsResource> getAllImages(){
 	  return this.bookService.getImages();
@@ -101,6 +109,7 @@ public class BookController {
   public Mono<Book> getBook(@PathVariable String filename ){
 	  return this.bookService.byImageName(filename);
   }
+*/
 
 
 }
