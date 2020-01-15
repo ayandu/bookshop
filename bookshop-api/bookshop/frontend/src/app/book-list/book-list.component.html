@@ -1,0 +1,13 @@
+<div *ngIf="status; else elseBlock">
+    <app-book-detail [book]="book"  (hideDetailEventEmitter)="hideDetail($event)"></app-book-detail>
+</div>
+<ng-template #elseBlock>
+    <br>
+        <h1>
+            <b>We have great books to read in store!</b>
+        </h1>
+    <br>
+    <div class="row">
+        <app-book-item   *ngFor="let b of books" [book]="b" (clickedEventEmitter)="isClicked($event)"></app-book-item>
+    </div> 
+</ng-template>

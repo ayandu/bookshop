@@ -1,0 +1,13 @@
+<br><h1><b>The Book Detail</b></h1><br>
+<div class="row" >
+    <div class="col-md-3 thumbnail">
+         <img class="card-img-top" src="http://localhost:8080/book/{{book.id}}/image" alt="Card image cap">  
+    </div>
+    <div class="col-md-9">
+        <app-detail-info [book]="book"></app-detail-info> 
+        <div>
+            <button href="#" class="card-link"> Add to cart</button> &nbsp;                             
+            <button routerLink="/books" (click)="hideDetail()"> Hide detail</button>
+        </div>
+    </div>
+</div>

@@ -84,7 +84,7 @@ public Mono<Book> update(String id, Book updatedBook) {
               .quantity(updatedBook.getQuantity())
               .imageName(updatedBook.getImageName())
               .build())
-        .flatMap(bookRepository::save);
+        .flatMap( book -> this.save(book));
   }
 
   public Mono<BigDecimal> getTotalPrice(String cartId){

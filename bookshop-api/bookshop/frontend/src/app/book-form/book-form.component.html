@@ -1,0 +1,100 @@
+
+<div class="raw">
+    <div class="col-md-12">
+        &nbsp;
+        <h2><b>Creat New Book Form</b></h2>
+    </div>
+    <div class="col-md-6">
+        <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+                  <input type="text" formControlName="title" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.title.errors }"> 
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Publisher</label>
+                <div class="col-sm-10">
+                    <input type="text" formControlName="publisher" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.publisher.errors }"> 
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div formArrayName="authors">
+                    <div   class="d-flex align-content-start flex-wrap">
+                        <button class="btn btn-secondary" (click)="addAuthor()">Press To Add Author</button>
+                    </div>
+                    <br>
+                    <div class="form-group row" *ngFor="let address of authors.controls; let i=index">
+                        <label for="colFormLabel" class="col-sm-2 col-form-label">Author</label>
+                        <div class="col-sm-10">
+                          <input type="text" [formControlName]="i" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.author.errors }"> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div formArrayName="categories">
+                    <div class="d-flex align-content-start flex-wrap">
+                        <button class="btn btn-secondary" (click)="addCategory()">Press To Add Category</button>
+                    </div>
+                    <br>
+                    <div class="form-group row" *ngFor="let address of categories.controls; let i=index">
+                        <label for="colFormLabel" class="col-sm-2 col-form-label">Category</label>
+                        <div class="col-sm-10">
+                          <input type="text" [formControlName]="i" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.category.errors}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Published</label>
+                <div class="col-sm-10">
+                  <input type="Date" formControlName="publishedDate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.publishedDate.errors }"> 
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                  <input type="number" formControlName="price" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.price.errors }"> 
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">Quantity</label>
+                <div class="col-sm-10">
+                  <input type="number" formControlName="quantity" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }"> 
+                </div>
+                
+            </div>
+        
+            <div class="form-group row">
+                <label for="colFormLabel" class="col-sm-2 col-form-label">ImageName</label>
+                <div class="col-sm-10">
+                    <input type="text" formControlName="imageName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.imageName.errors }"> 
+                    <div *ngIf="submitted && f.imageName.errors" class="invalid-feedback">
+                        <div *ngIf="f.imageName.errors.required">Image Name is required</div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary mr-1">Submit</button>
+                <button class="btn btn-secondary" type="reset" (click)="onReset()">Cancel</button>
+            </div>
+            <!-- 
+
+            <button type="submit" [disabled]="!bookForm.valid">Submit</button>
+
+            -->
+        </form>
+    </div>
+    <div class="col-md-12">
+    <br>
+    <a [routerLink]="['/admin/books']">Manage Books</a> | <a [routerLink]="['/admin/orders']">Manage Orders</a>
+    </div>
+    
+</div>

@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="thumbnail">
+            <img class="card-img-top" src="http://localhost:8080/book/{{book.id}}/image" alt="Card image cap">
+            <div class="caption" >
+                <p>
+                <strong>Price:</strong>  $ {{book.price}}
+                </p>
+                <p>
+                    <button class="btn btn-default"  (click)="isClicked()">View Details</button>
+                        <!-- routerLink="/book/detail" -->
+                </p>
+                </div>
+            </div>
+        </div>
+ </div>
